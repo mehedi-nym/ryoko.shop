@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Prata&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+a.active hr{
+    display: block;
+}
+
+
+*{
+    font-family: Outfit;
+}
+.prata-regular {
+    font-family: "Prata", serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+
+::-webkit-scrollbar{
+  display: none;
+}
+  
+  @media (max-width:640px) {
+    a.active{
+        background-color: black;
+        color: white;
+    }
+  }
+
+/* Custom Checkbox */
+.custom-checkbox {
+    appearance: none;
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid gray;
+    border-radius: 0.25rem;
+    outline: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    display: flex;           /* Flexbox to center the content */
+    align-items: center;     /* Center vertically */
+    justify-content: center; /* Center horizontally */
+    position: relative;      /* Ensure proper positioning of the checkmark */
+  }
+  
+  .custom-checkbox:checked {
+    background-color: #FF33CC;
+    border-color: pink;
+  }
+  
+  .custom-checkbox:checked::after {
+    content: '✔';           /* Checkmark symbol */
+    color: white;
+    font-size: 0.75rem;      /* Adjusted font size to fit */
+    position: absolute;      /* Absolute positioning */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);  /* Center the checkmark */
+  }
+  
