@@ -1,5 +1,6 @@
 import { v2 as cloudinary } from "cloudinary"
 import productModel from "../models/productModel.js"
+import mongoose from "mongoose";
 
 
   
@@ -68,21 +69,43 @@ const listProducts = async (req,res) => {
 }
 
 //function for removing product
-const removeProduct = async (req,res) => {
-    try{
+const removeProduct = async (req, res) => {
+    try {
+        const { id } = req.body;
 
-        await productModel.findByIdAndDelete(req.body.id)
-        res.json({success:true,message:"Product Removed Successfully"})
+        // Validate ID format
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ success: false, message: "Invalid product ID" });
+        }
+
+        // Attempt to delete the product
+        const deletedProduct = await productModel.findByIdAndDelete(id);
+
+        // Check if a product was actually found and deleted
+        if (!deletedProduct) {
+            return res.status(404).json({ success: false, message: "Product not found or already deleted" });
+        }
+
+        res.json({ success: true, message: "Product Removed Successfully" });
 
     } catch (error) {
-        console.log(error)
-        res.json({success:false, message: error.message })
+        console.error("Error while removing product:", error);
+        res.status(500).json({ success: false, message: error.message });
     }
-}
+};
 
 //function for single product info
 const singleProduct = async (req,res) => {
-    
+    try {
+
+        const { productId } = req.body
+        const product = await productModel.findById(productId)
+        res.json({success:true,product})
+        
+    } catch (error) {
+        console.log(error)
+        res.json({success : false, message: error.message})
+         }
 }
 
 export { listProducts, addProduct, removeProduct, singleProduct}

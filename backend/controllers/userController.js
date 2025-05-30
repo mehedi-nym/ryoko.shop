@@ -82,7 +82,27 @@ const registerUser = async (req, res) => {
 
 // Route for admin login
 const adminLogin = async (req, res) => {
-    // Logic for admin login will go here
-}
+  try {
+    const { email, password } = req.body;
+
+    // Check for empty fields
+    if (!email || !password) {
+      return res.status(400).json({ success: false, message: "Email and password required" });
+    }
+
+    // Match admin credentials from environment
+    if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
+      const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: "1h" });
+      return res.status(200).json({ success: true, token, message: "Admin login successful" });
+    }
+
+    // Wrong credentials
+    return res.status(401).json({ success: false, message: "Invalid credentials" });
+
+  } catch (error) {
+    console.error("Admin login error:", error);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
 
 export { loginUser, registerUser, adminLogin };
